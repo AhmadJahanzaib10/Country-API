@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Api Project</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap');
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+        }
+
+        .container {
+            width: 100vw;
+            height: 100vh;
+            background-color: #4169e1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .serach-bar {
+            width: 400px;
+            background-color: #fff;
+            padding: 3rem 4rem;
+            border-radius: 20px;
+        }
+        .search-container{
+            width: 300px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .input {
+            padding: 12px 16px;
+            border: 2px solid #4169e1;
+            border-radius: 10px;
+            width: 200px;
+            outline: none;
+            font-size: 16px;
+        }
+
+        .btn {
+            padding: 2px 20px;
+            background-color: #4169e1;
+            font-size: 15px;
+            color: white;
+            border: 1px solid #4169e1;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.3s ease;
+        }
+        .btn:hover{
+            background-color: #3859bd;
+        }
+        .result{
+            margin-top: 15px;
+            border-radius: 20px;
+            background-color: #fff;
+            padding: 2rem 3rem;
+            visibility: hidden;
+        }
+        .img{
+            width: 220px;
+        }
+        .result-prop{
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            margin-top: 4px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="serach-bar">
+            <div class="search-container">
+                <input type="text" placeholder="Country name" class="input" required>
+                <button class="btn">Search</button>
+            </div>
+        </div>
+        <div class="result">
+            <img src="" alt="" class="img">
+            <div class="result-prop"><span>Name :</span> <span class="title"></span></div>
+            <div class="result-prop"><span>Capital :</span> <span class="capital"></span></div>
+            <div class="result-prop"><span>Population :</span> <span class="population"></span></div>
+            <div class="result-prop"><span>Time Zone :</span> <span class="time-zone"></span></div>
+            <div class="result-prop"><span>Latitude :</span> <span class="latitude"></span></div>
+            <div class="result-prop"><span>Longitude :</span> <span class="longitude"></span></div>
+            
+        </div>
+
+    </div>
+    <script>
+
+        const btn = document.querySelector(".btn")
+        const input = document.querySelector(".input")
+        const title = document.querySelector(".title")
+        const capital = document.querySelector(".capital")
+        const population = document.querySelector(".population")
+        const timeZone = document.querySelector(".time-zone")
+        const result = document.querySelector(".result")
+        const latitude = document.querySelector(".latitude")
+        const longitude = document.querySelector(".longitude")
+        const img = document.querySelector(".img")
+        const fetchCountries = async (name) => {
+            const response = await fetch(`https://restcountries.com/v3.1/name/${name}?fullText=true`);
+            const json = await response.json();
+            console.log(json[0])
+            console.log(json[0].population)
+            result.style.visibility = "visible";
+            img.setAttribute("src", json[0].flags.png)
+            title.innerText = json[0].name.common;
+            capital.innerText = json[0].capital[0];
+            population.innerText = json[0].population;
+            timeZone.innerText = json[0].timezones[0];
+            latitude.innerText = json[0].capitalInfo.latlng[0];
+            longitude.innerText = json[0].capitalInfo.latlng[1];
+        }
+        btn.addEventListener('click', () => {
+            let value = input.value;
+            if (!value) {
+                console.log("Please Enter A Value");
+            }
+            fetchCountries(value);
+        })
+    </script>
+</body>
+
+</html>
